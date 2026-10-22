@@ -45,8 +45,8 @@ The skill is provider-agnostic. You need something that can:
 | Keyword rankings / competitor domains | DataForSEO (directly or via an MCP connector), other SEO APIs | Google Search Console export, manual SERP check |
 
 To add another provider, map its output to the fields in
-`examples/acme-widgets.results.json` — that schema is the only contract the
-scorecard script depends on. Paid calls are always budget-capped (see SKILL.md §0).
+[`schema/results.schema.json`](schema/results.schema.json), illustrated by
+`examples/acme-widgets.results.json`. Paid calls are always budget-capped (see SKILL.md §0).
 
 ## Install
 
@@ -75,7 +75,18 @@ python3 scripts/scorecard.py examples/acme-widgets.results.json > scorecard.md
 python3 scripts/scorecard.py results.json previous/results.json > scorecard.md
 ```
 
-Run tests (standard library only, Python 3.9+):
+Inputs are validated before any report is printed, including the previous audit
+when comparing. Missing fields and wrong types report a field path such as
+`$.results[0].mentioned`; invalid input exits with code 2. Keep the bundled
+`schema/` directory alongside `scripts/`. The standard-library checker supports
+the keywords used by this schema, not arbitrary JSON Schema documents. It also
+rejects duplicate question IDs, unknown question references, duplicate
+engine/question pairs, invalid calendar dates, and non-finite JSON numbers.
+Extensions are allowed; successful observations require a boolean `mentioned`,
+and failed observations require an `error`. An empty results list means no
+observations and produces an `n/a` hit rate.
+
+Run tests (standard library only; CI verifies Python 3.10–3.12):
 
 ```bash
 python3 -m unittest discover -s tests

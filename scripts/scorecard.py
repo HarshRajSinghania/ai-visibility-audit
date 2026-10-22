@@ -4,20 +4,107 @@
 Usage:
     python3 scripts/scorecard.py results.json [previous_results.json] > scorecard.md
 
-Standard library only. See examples/acme-widgets.results.json for the schema.
+Standard library only. Contract: schema/results.schema.json.
 """
 from __future__ import annotations
 
 import json
 import sys
 from collections import Counter
+from datetime import date
+from pathlib import Path
+import re
 
 ENGINE_ORDER = ["chatgpt", "gemini", "google_ai_mode", "perplexity"]
 
 
+class ValidationError(ValueError):
+    """Input violates the local results contract."""
+
+
+def _check(value, schema: dict, path: str = "$", /) -> None:
+    """Check the keywords used in our bundled schema, not arbitrary JSON Schema."""
+    kinds = {
+        "object": lambda v: isinstance(v, dict),
+        "array": lambda v: isinstance(v, list),
+        "string": lambda v: isinstance(v, str),
+        "boolean": lambda v: isinstance(v, bool),
+        "integer": lambda v: type(v) is int or (type(v) is float and v.is_integer()),
+        "null": lambda v: v is None,
+    }
+    expected = schema.get("type")
+    if expected is not None:
+        allowed = [expected] if isinstance(expected, str) else expected
+        if not any(kinds[k](value) for k in allowed):
+            raise ValidationError(f"{path}: expected {' or '.join(allowed)}")
+    if "enum" in schema and value not in schema["enum"]:
+        raise ValidationError(f"{path}: expected one of {schema['enum']}")
+    if "const" in schema and value != schema["const"]:
+        raise ValidationError(f"{path}: unexpected value")
+    if isinstance(value, dict):
+        for key in schema.get("required", []):
+            if key not in value:
+                raise ValidationError(f"{path}.{key}: required field is missing")
+        for key, child in schema.get("properties", {}).items():
+            if key in value:
+                _check(value[key], child, f"{path}.{key}")
+    if isinstance(value, list):
+        if len(value) < schema.get("minItems", 0):
+            raise ValidationError(f"{path}: expected at least {schema['minItems']} item(s)")
+        if "items" in schema:
+            for index, item in enumerate(value):
+                _check(item, schema["items"], f"{path}[{index}]")
+    if isinstance(value, str):
+        if len(value) < schema.get("minLength", 0):
+            raise ValidationError(f"{path}: must not be empty")
+        if schema.get("format") == "date":
+            try:
+                if not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", value):
+                    raise ValueError
+                date.fromisoformat(value)
+            except ValueError:
+                raise ValidationError(f"{path}: expected a valid YYYY-MM-DD date") from None
+    if type(value) in (int, float) and "minimum" in schema and value < schema["minimum"]:
+        raise ValidationError(f"{path}: must be at least {schema['minimum']}")
+    if "if" in schema:
+        try:
+            _check(value, schema["if"], path)
+        except ValidationError:
+            branch = "else"
+        else:
+            branch = "then"
+        _check(value, schema.get(branch, {}), path)
+
+
+def validate(data: dict) -> None:
+    """Validate shape plus unique question IDs, references, and observation pairs."""
+    schema_path = Path(__file__).resolve().parents[1] / "schema" / "results.schema.json"
+    with schema_path.open(encoding="utf-8") as f:
+        _check(data, json.load(f))
+    ids = set()
+    for index, question in enumerate(data["questions"]):
+        if question["id"] in ids:
+            raise ValidationError(f"$.questions[{index}].id: duplicate question ID")
+        ids.add(question["id"])
+    pairs = set()
+    for index, result in enumerate(data["results"]):
+        if result["question_id"] not in ids:
+            raise ValidationError(f"$.results[{index}].question_id: unknown question ID")
+        pair = (result["engine"], result["question_id"])
+        if pair in pairs:
+            raise ValidationError(f"$.results[{index}]: duplicate engine/question_id pair")
+        pairs.add(pair)
+
+
+def _reject_constant(value: str):
+    raise ValidationError("$: non-finite numbers are not valid JSON")
+
+
 def load(path: str) -> dict:
     with open(path, encoding="utf-8") as f:
-        return json.load(f)
+        data = json.load(f, parse_constant=_reject_constant)
+    validate(data)
+    return data
 
 
 def _engines(data: dict) -> list[str]:
@@ -96,6 +183,9 @@ def diff(curr: dict, prev: dict) -> list[str]:
 
 
 def render(data: dict, prev: dict | None = None) -> str:
+    validate(data)
+    if prev is not None:
+        validate(prev)
     s = summarize(data)
     engines = _engines(data)
     idx = {(r["engine"], r["question_id"]): r for r in data.get("results", [])}
@@ -130,8 +220,19 @@ def main(argv: list[str]) -> int:
     if len(argv) not in (2, 3):
         print(__doc__, file=sys.stderr)
         return 2
-    prev = load(argv[2]) if len(argv) == 3 else None
-    sys.stdout.write(render(load(argv[1]), prev))
+    try:
+        prev = load(argv[2]) if len(argv) == 3 else None
+        report = render(load(argv[1]), prev)
+    except ValidationError as exc:
+        print(f"Invalid results: {exc}", file=sys.stderr)
+        return 2
+    except json.JSONDecodeError as exc:
+        print(f"Invalid JSON at line {exc.lineno}, column {exc.colno}", file=sys.stderr)
+        return 2
+    except OSError:
+        print("Cannot read input or bundled schema; check file access.", file=sys.stderr)
+        return 2
+    sys.stdout.write(report)
     return 0
 
 
