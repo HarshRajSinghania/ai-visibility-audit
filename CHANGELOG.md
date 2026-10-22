@@ -5,14 +5,11 @@ All notable changes are documented here. Format: Keep a Changelog; versioning: S
 ## [Unreleased]
 
 ### Added
-- Fictional industrial equipment and SaaS prompt sets, each with five intent questions and one brand question.
+- Example question sets for industrial equipment and SaaS under examples/question-sets/.
 - Standalone manual audit worksheet requiring no paid tools or API keys.
 - Draft 2020-12 results schema and standard-library validation with field-specific errors.
 - Security reporting guidance and sanitized bug, feature, and pull request templates.
 - Offline fixture CI on pushes and pull requests for Python 3.10, 3.11, and 3.12.
-
-### Fixed
-- Standardized synthetic competitor placeholders to `.example` domains and corrected the example intent-answer denominator.
 
 ## [0.1.0] - 2026-10-22
 ### Added
