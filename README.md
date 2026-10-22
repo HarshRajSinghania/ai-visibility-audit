@@ -98,6 +98,9 @@ python3 -m unittest discover -s tests
 
 ## Example output
 
+Start with the [industrial equipment and SaaS question sets](examples/question-sets/).
+Each contains five intent prompts and one brand prompt, with no collected answers.
+
 All examples use **Acme Widgets, a fictional brand. The numbers are FAKE** and
 exist only to show the format:
 

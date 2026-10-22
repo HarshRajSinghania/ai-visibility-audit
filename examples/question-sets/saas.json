@@ -1,0 +1,39 @@
+{
+  "_note": "Fictional prompt set only. No answers, measurements, or product claims. Acme Widgets represents a separate fictional scenario in each set.",
+  "brand": "Acme Widgets",
+  "domains": [
+    "acme-widgets.example"
+  ],
+  "questions": [
+    {
+      "id": "Q1",
+      "type": "intent",
+      "text": "Which workflow software options suit a small team replacing spreadsheet approvals?"
+    },
+    {
+      "id": "Q2",
+      "type": "intent",
+      "text": "How should a buyer compare workflow software integrations and data export options?"
+    },
+    {
+      "id": "Q3",
+      "type": "intent",
+      "text": "What security and access control evidence should a workflow software buyer request?"
+    },
+    {
+      "id": "Q4",
+      "type": "intent",
+      "text": "How can a small team compare workflow software onboarding and support?"
+    },
+    {
+      "id": "Q5",
+      "type": "intent",
+      "text": "What should a buyer check about subscription limits and total cost for workflow software?"
+    },
+    {
+      "id": "Q6",
+      "type": "brand",
+      "text": "What verifiable information is available about Acme Widgets as a workflow software provider?"
+    }
+  ]
+}
