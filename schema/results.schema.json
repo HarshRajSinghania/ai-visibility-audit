@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI visibility audit results",
+  "description": "Local results contract. Extensions are allowed. Question references and unique engine/question pairs are additionally checked by scorecard.py.",
+  "type": "object",
+  "required": [
+    "brand",
+    "date",
+    "market",
+    "questions",
+    "results"
+  ],
+  "properties": {
+    "_note": {
+      "type": "string"
+    },
+    "brand": {
+      "type": "string",
+      "minLength": 1
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "market": {
+      "type": "string",
+      "minLength": 1
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "intent",
+              "brand"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "engine",
+          "question_id",
+          "status"
+        ],
+        "properties": {
+          "engine": {
+            "type": "string",
+            "minLength": 1
+          },
+          "question_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "ok",
+              "failed"
+            ]
+          },
+          "mentioned": {
+            "type": "boolean"
+          },
+          "rank": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1
+          },
+          "name_used": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cited_urls": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "competitors": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "third_party_sources": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "error": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "if": {
+          "properties": {
+            "status": {
+              "const": "ok"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "mentioned"
+          ],
+          "if": {
+            "properties": {
+              "mentioned": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "rank": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        "else": {
+          "required": [
+            "error"
+          ]
+        }
+      }
+    }
+  }
+}
