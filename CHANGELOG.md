@@ -5,6 +5,7 @@ All notable changes are documented here. Format: Keep a Changelog; versioning: S
 ## [Unreleased]
 
 ### Added
+- Standalone manual audit worksheet requiring no paid tools or API keys.
 - Draft 2020-12 results schema and standard-library validation with field-specific errors.
 - Security reporting guidance and sanitized bug, feature, and pull request templates.
 - Offline fixture CI on pushes and pull requests for Python 3.10, 3.11, and 3.12.

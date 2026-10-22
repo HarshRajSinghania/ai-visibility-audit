@@ -59,6 +59,10 @@ Copy the folder (or just `SKILL.md`) to where your agent loads skills, for examp
 
 ## Usage
 
+For a workflow without paid data sources, use the
+[manual worksheet](templates/manual-worksheet.md). It covers evidence capture,
+failed attempts, missing coverage, and mapping observations into results JSON.
+
 Example prompt (see `examples/prompt.md`):
 
 ```text
