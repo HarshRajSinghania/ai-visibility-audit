@@ -4,6 +4,9 @@ All notable changes are documented here. Format: Keep a Changelog; versioning: S
 
 ## [Unreleased]
 
+### Added
+- Offline fixture CI on pushes and pull requests for Python 3.10, 3.11, and 3.12.
+
 ## [0.1.0] - 2026-10-22
 ### Added
 - `SKILL.md`: provider-agnostic AI visibility & SEO audit procedure with budget
