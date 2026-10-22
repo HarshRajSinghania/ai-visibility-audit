@@ -1,0 +1,39 @@
+{
+  "_note": "Fictional prompt set only. No answers, measurements, or product claims. Acme Widgets represents a separate fictional scenario in each set.",
+  "brand": "Acme Widgets",
+  "domains": [
+    "acme-widgets.example"
+  ],
+  "questions": [
+    {
+      "id": "Q1",
+      "type": "intent",
+      "text": "Which industrial widget suppliers support small production runs?"
+    },
+    {
+      "id": "Q2",
+      "type": "intent",
+      "text": "What evidence should a buyer request when comparing industrial widget suppliers?"
+    },
+    {
+      "id": "Q3",
+      "type": "intent",
+      "text": "Which industrial widget suppliers offer custom dimensions?"
+    },
+    {
+      "id": "Q4",
+      "type": "intent",
+      "text": "How can a buyer compare installation and operator training options for industrial widgets?"
+    },
+    {
+      "id": "Q5",
+      "type": "intent",
+      "text": "What should a buyer check about spare parts and maintenance support for industrial widgets?"
+    },
+    {
+      "id": "Q6",
+      "type": "brand",
+      "text": "What verifiable information is available about Acme Widgets as an industrial equipment supplier?"
+    }
+  ]
+}

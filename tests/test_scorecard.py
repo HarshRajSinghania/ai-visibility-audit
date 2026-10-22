@@ -25,7 +25,7 @@ class ScorecardTest(unittest.TestCase):
     def test_overall_and_competitors(self):
         s = scorecard.summarize(self.data)
         self.assertAlmostEqual(s["overall_hit_rate"], 3 / 5)
-        self.assertEqual(s["competitors"][0], ("Globex Widgets", 3))
+        self.assertEqual(s["competitors"][0], ("supplier-one.example", 3))
 
     def test_render_contains_table(self):
         md = scorecard.render(self.data)
@@ -38,10 +38,10 @@ class ScorecardTest(unittest.TestCase):
         for r in prev["results"]:
             if r["engine"] == "chatgpt" and r["question_id"] == "Q2":
                 r["mentioned"], r["rank"] = False, None
-            r["competitors"] = [c for c in r.get("competitors", []) if c != "Umbrella Industrial"]
+            r["competitors"] = [c for c in r.get("competitors", []) if c != "supplier-three.example"]
         md = scorecard.render(self.data, prev)
         self.assertIn("chatgpt / Q2: now mentioned", md)
-        self.assertIn("New competitors: Umbrella Industrial", md)
+        self.assertIn("New competitors: supplier-three.example", md)
 
 
 if __name__ == "__main__":

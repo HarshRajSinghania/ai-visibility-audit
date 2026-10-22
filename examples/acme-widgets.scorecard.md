@@ -1,3 +1,5 @@
+> SYNTHETIC FIXTURE ONLY — fictional Acme Widgets, not real observations.
+
 # AI Visibility Scorecard — Acme Widgets
 
 Audit date: 2026-01-15
@@ -21,9 +23,9 @@ Audit date: 2026-01-15
 
 ## Competitors named by AI engines
 
-- Globex Widgets (3)
-- Initech Parts (1)
-- Umbrella Industrial (1)
+- supplier-one.example (3)
+- supplier-two.example (1)
+- supplier-three.example (1)
 
 ## Third-party sources cited
 
