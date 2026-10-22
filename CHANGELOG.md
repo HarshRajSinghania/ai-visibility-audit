@@ -10,6 +10,9 @@ All notable changes are documented here. Format: Keep a Changelog; versioning: S
 - Security reporting guidance and sanitized bug, feature, and pull request templates.
 - Offline fixture CI on pushes and pull requests for Python 3.10, 3.11, and 3.12.
 
+### Fixed
+- Invalid UTF-8 input now fails cleanly with exit code 2 before any report output.
+
 ## [0.1.0] - 2026-10-22
 ### Added
 - `SKILL.md`: provider-agnostic AI visibility & SEO audit procedure with budget
