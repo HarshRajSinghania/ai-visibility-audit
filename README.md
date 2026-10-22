@@ -1,5 +1,7 @@
 # ai-visibility-audit
 
+[![CI](https://github.com/stefan-white/ai-visibility-audit/actions/workflows/ci.yml/badge.svg)](https://github.com/stefan-white/ai-visibility-audit/actions/workflows/ci.yml)
+
 An agent skill that checks **whether AI answer engines recommend your brand** —
 ChatGPT, Gemini, Google AI Mode, Perplexity — and pairs it with classic Google
 keyword rankings and competitor domains. The output is an evidence-based report
