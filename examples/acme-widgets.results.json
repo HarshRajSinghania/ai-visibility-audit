@@ -1,0 +1,29 @@
+{
+  "_note": "FAKE example data for a fictional brand. Not real measurements.",
+  "brand": "Acme Widgets",
+  "aliases": ["Acme", "Acme Widget Co."],
+  "domains": ["acme-widgets.example"],
+  "date": "2026-01-15",
+  "market": "US",
+  "questions": [
+    {"id": "Q1", "type": "intent", "text": "Best industrial widget manufacturers for small factories?"},
+    {"id": "Q2", "type": "intent", "text": "Which widget suppliers offer custom sizes with short lead times?"},
+    {"id": "Q3", "type": "brand", "text": "Is Acme Widgets a reliable supplier?"}
+  ],
+  "results": [
+    {"engine": "chatgpt", "question_id": "Q1", "status": "ok", "mentioned": false, "rank": null, "name_used": null,
+     "cited_urls": ["https://directory.example/widgets"], "competitors": ["Globex Widgets", "Initech Parts"],
+     "third_party_sources": ["directory.example"]},
+    {"engine": "chatgpt", "question_id": "Q2", "status": "ok", "mentioned": true, "rank": 3, "name_used": "Acme",
+     "cited_urls": ["https://acme-widgets.example/custom"], "competitors": ["Globex Widgets"],
+     "third_party_sources": []},
+    {"engine": "chatgpt", "question_id": "Q3", "status": "ok", "mentioned": true, "rank": 1, "name_used": "Acme Widgets",
+     "cited_urls": ["https://acme-widgets.example/about"], "competitors": [], "third_party_sources": ["reviews.example"]},
+    {"engine": "perplexity", "question_id": "Q1", "status": "ok", "mentioned": false, "rank": null, "name_used": null,
+     "cited_urls": ["https://forum.example/t/123"], "competitors": ["Globex Widgets", "Umbrella Industrial"],
+     "third_party_sources": ["forum.example", "directory.example"]},
+    {"engine": "perplexity", "question_id": "Q2", "status": "failed", "error": "provider timeout"},
+    {"engine": "perplexity", "question_id": "Q3", "status": "ok", "mentioned": true, "rank": 1, "name_used": "Acme Widgets",
+     "cited_urls": ["https://acme-widgets.example/"], "competitors": [], "third_party_sources": []}
+  ]
+}

@@ -1,0 +1,16 @@
+# Audit outputs (may contain real client data)
+raw/
+audit-*/
+results.json
+scorecard.md
+*.secret
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
